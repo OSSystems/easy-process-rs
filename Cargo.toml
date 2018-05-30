@@ -1,0 +1,15 @@
+[package]
+name = "process"
+version = "0.1.0"
+authors = ["Otavio Salvador <otavio@ossystems.com.br>"]
+description = "Easy to use process runner"
+repository = "https://github.com/otavio/process.rs"
+homepage = "https://github.com/otavio/process.rs"
+documentation = "https://docs.rs/process"
+keywords = ["process", "run"]
+license = "MIT | Apache-2.0"
+readme = "README.md"
+
+[dependencies]
+checked_command = "0.2.2"
+cmdline_words_parser = "0.0.2"
