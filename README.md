@@ -1,19 +1,19 @@
-[![Build Status](https://travis-ci.org/otavio/process.rs.svg?branch=master)](https://travis-ci.org/otavio/process.rs)
+[![Build Status](https://travis-ci.org/otavio/easy-process-rs.svg?branch=master)](https://travis-ci.org/otavio/easy-process-rs)
 
-# process
+# easy_process
 
 Allow running external commands.
 
 ## Example
 ```rust
-use process;
+use easy_process;
 
 // stdout
-let output = process::run(r#"sh -c 'echo "1 2 3 4"'"#)?;
+let output = easy_process::run(r#"sh -c 'echo "1 2 3 4"'"#)?;
 assert_eq!(&output.stdout, "1 2 3 4\n");
 
 // stderr
-let output = process::run(r#"sh -c 'echo "1 2 3 4" >&2'"#)?;
+let output = easy_process::run(r#"sh -c 'echo "1 2 3 4" >&2'"#)?;
 assert_eq!(&output.stderr, "1 2 3 4\n");
 ```
 

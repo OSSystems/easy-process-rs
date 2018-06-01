@@ -7,15 +7,15 @@
 //!
 //! # Example
 //! ```
-//! # fn run() -> Result<(), process::Error> {
-//! use process;
+//! # fn run() -> Result<(), easy_process::Error> {
+//! use easy_process;
 //!
 //! // stdout
-//! let output = process::run(r#"sh -c 'echo "1 2 3 4"'"#)?;
+//! let output = easy_process::run(r#"sh -c 'echo "1 2 3 4"'"#)?;
 //! assert_eq!(&output.stdout, "1 2 3 4\n");
 //!
 //! // stderr
-//! let output = process::run(r#"sh -c 'echo "1 2 3 4" >&2'"#)?;
+//! let output = easy_process::run(r#"sh -c 'echo "1 2 3 4" >&2'"#)?;
 //! assert_eq!(&output.stderr, "1 2 3 4\n");
 //! # Ok(())
 //! # }
@@ -32,7 +32,7 @@ use std::io;
 use std::process::ExitStatus;
 
 #[derive(Debug, Default)]
-/// Holds the output for a givin process::run
+/// Holds the output for a givin easy_process::run
 pub struct Output {
     /// The stdout output of the process
     pub stdout: String,
@@ -41,7 +41,7 @@ pub struct Output {
 }
 
 #[derive(Debug)]
-/// Error variant for `process::run`.
+/// Error variant for `easy_process::run`.
 pub enum Error {
     /// I/O error
     Io(io::Error),

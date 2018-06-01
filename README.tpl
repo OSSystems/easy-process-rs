@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/otavio/process.rs.svg?branch=master)](https://travis-ci.org/otavio/process.rs)
+[![Build Status](https://travis-ci.org/otavio/easy-process-rs.svg?branch=master)](https://travis-ci.org/otavio/easy-process-rs)
 
 # {{crate}}
 
