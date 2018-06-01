@@ -3,7 +3,16 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 //
 
-//! Allow running external commands.
+//! Allow running external commands and properly handle its success
+//! and failures.
+//!
+//! This creates provides a `run` function that does inline parsing of
+//! literal command line strings (handling escape codes and splitting
+//! at whitespace) and checks the ExitStatus of the command. If it
+//! didn't succeed they will return a Err(...) instead of a Ok(...).
+//!
+//! Note that the provided functions do return their own `Output`
+//! struct instead of std::process::Output.
 //!
 //! # Example
 //! ```
@@ -99,6 +108,9 @@ impl fmt::Display for Error {
 ///
 /// `cmd` - A string slice containing the command to be run.
 ///
+/// # Errors
+///
+/// if the exit status is not successful or a io::Error was returned.
 pub fn run(cmd: &str) -> Result<Output, Error> {
     let mut cmd = cmd.to_string();
     let mut cmd = cmd.parse_cmdline_words();
