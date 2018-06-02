@@ -55,7 +55,7 @@ pub enum Error {
     /// I/O error
     Io(io::Error),
     /// Process error. It holds two parts: first argument is the exit
-    /// code and the second is the output (stdout and strerr).
+    /// code and the second is the output (stdout and stderr).
     Failure(ExitStatus, Output),
 }
 
