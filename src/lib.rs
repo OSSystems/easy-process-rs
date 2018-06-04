@@ -18,7 +18,7 @@
 //! didn't succeed they will return a Err(...) instead of a Ok(...).
 //!
 //! Note that the provided functions do return their own `Output`
-//! struct instead of std::process::Output.
+//! struct instead of [`std::process::Output`].
 //!
 //! # Example
 //! ```
@@ -36,6 +36,8 @@
 //! # }
 //! # run();
 //!```
+//!
+//! [`std::process::Output`]: https://doc.rust-lang.org/std/process/struct.Output.html
 
 extern crate checked_command;
 extern crate cmdline_words_parser;
@@ -47,7 +49,7 @@ use std::io;
 use std::process::ExitStatus;
 
 #[derive(Debug, Default)]
-/// Holds the output for a givin easy_process::run
+/// Holds the output for a giving easy_process::run
 pub struct Output {
     /// The stdout output of the process
     pub stdout: String,
@@ -72,9 +74,9 @@ impl From<checked_command::Error> for Error {
             checked_command::Error::Failure(ex, err) => Error::Failure(
                 ex,
                 match err {
-                    Some(ref e) => Output {
-                        stdout: String::from_utf8_lossy(&e.stdout).into(),
-                        stderr: String::from_utf8_lossy(&e.stderr).into(),
+                    Some(e) => Output {
+                        stdout: String::from_utf8_lossy(&e.stdout).to_string(),
+                        stderr: String::from_utf8_lossy(&e.stderr).to_string(),
                     },
                     None => Output::default(),
                 },
@@ -87,7 +89,6 @@ impl error::Error for Error {
     fn description(&self) -> &str {
         "Process error"
     }
-
     fn cause(&self) -> Option<&error::Error> {
         Some(self)
     }
@@ -97,7 +98,7 @@ impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Error::Io(e) => write!(f, "unexpected I/O Error: {}", e),
-            Error::Failure(ex, ref output) => write!(
+            Error::Failure(ex, output) => write!(
                 f,
                 "status: {:?} stdout: {:?} stderr: {:?}",
                 ex.code(),
@@ -128,8 +129,8 @@ pub fn run(cmd: &str) -> Result<Output, Error> {
 
     let o = p.output()?;
     Ok(Output {
-        stdout: String::from_utf8_lossy(&o.stdout).into(),
-        stderr: String::from_utf8_lossy(&o.stderr).into(),
+        stdout: String::from_utf8_lossy(&o.stdout).to_string(),
+        stderr: String::from_utf8_lossy(&o.stderr).to_string(),
     })
 }
 
