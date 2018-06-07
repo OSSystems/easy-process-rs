@@ -1,3 +1,9 @@
+#![deny(
+    warnings, missing_debug_implementations, missing_copy_implementations, trivial_casts,
+    trivial_numeric_casts, unsafe_code, unstable_features, unused_import_braces,
+    unused_qualifications, missing_docs
+)]
+
 // Copyright (C) 2018 O.S. Systems Sofware LTDA
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
@@ -71,6 +77,7 @@ impl From<checked_command::Error> for Error {
                 match err {
                     Some(e) => Output {
                         stdout: String::from_utf8_lossy(&e.stdout).to_string(), 
+                        stdout: String::from_utf8_lossy(&e.stdout).to_string(),
                         stderr: String::from_utf8_lossy(&e.stderr).to_string(),
                     },
                     None => Output::default(),
