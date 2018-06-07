@@ -69,8 +69,7 @@ impl From<checked_command::Error> for Error {
             checked_command::Error::Failure(ex, err) => Error::Failure(
                 ex,
                 match err {
-                    Some(e) => Output { // remove unneccesary `ref` because it auto unboxes anyways.
-                        // IMO, .into() is over used in the rust community, and .to_string() should be used when possible
+                    Some(e) => Output {
                         stdout: String::from_utf8_lossy(&e.stdout).to_string(), 
                         stderr: String::from_utf8_lossy(&e.stderr).to_string(),
                     },
@@ -82,15 +81,19 @@ impl From<checked_command::Error> for Error {
 }
 
 impl error::Error for Error {
-    fn description(&self) -> &str { "Process error" }
-    fn cause(&self) -> Option<&error::Error> {Some(self)}
+    fn description(&self) -> &str {
+        "Process error" 
+    }
+    fn cause(&self) -> Option<&error::Error> {
+        Some(self)
+    }
 }
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Error::Io(e) => write!(f, "unexpected I/O Error: {}", e),
-            Error::Failure(ex, output) => write!(   // again, output will be auto-unboxed, so `ref` is spurrious
+            Error::Failure(ex, output) => write!(
                 f,
                 "status: {:?} stdout: {:?} stderr: {:?}",
                 ex.code(),
