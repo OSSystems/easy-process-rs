@@ -39,6 +39,7 @@
 //!
 //! [`std::process::Output`]: https://doc.rust-lang.org/std/process/struct.Output.html
 
+#![warn(missing_docs)]
 extern crate checked_command;
 extern crate cmdline_words_parser;
 
