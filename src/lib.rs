@@ -1,3 +1,9 @@
+#![deny(
+    warnings, missing_debug_implementations, missing_copy_implementations, trivial_casts,
+    trivial_numeric_casts, unsafe_code, unstable_features, unused_import_braces,
+    unused_qualifications, missing_docs
+)]
+
 // Copyright (C) 2018 O.S. Systems Sofware LTDA
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
@@ -30,7 +36,7 @@
 //! # }
 //! # run();
 //!```
-#![warn(missing_docs)]
+
 extern crate checked_command;
 extern crate cmdline_words_parser;
 
