@@ -88,7 +88,7 @@ impl From<checked_command::Error> for Error {
 
 impl error::Error for Error {
     fn description(&self) -> &str {
-        "Process error" 
+        "Process error"
     }
     fn cause(&self) -> Option<&error::Error> {
         Some(self)
