@@ -76,7 +76,6 @@ impl From<checked_command::Error> for Error {
                 ex,
                 match err {
                     Some(e) => Output {
-                        stdout: String::from_utf8_lossy(&e.stdout).to_string(), 
                         stdout: String::from_utf8_lossy(&e.stdout).to_string(),
                         stderr: String::from_utf8_lossy(&e.stderr).to_string(),
                     },
