@@ -1,13 +1,20 @@
-#![deny(
-    warnings, missing_debug_implementations, missing_copy_implementations, trivial_casts,
-    trivial_numeric_casts, unsafe_code, unstable_features, unused_import_braces,
-    unused_qualifications, missing_docs
-)]
-
 // Copyright (C) 2018 O.S. Systems Sofware LTDA
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
 //
+
+#![deny(
+    missing_copy_implementations,
+    missing_debug_implementations,
+    missing_docs,
+    trivial_casts,
+    trivial_numeric_casts,
+    unsafe_code,
+    unstable_features,
+    unused_import_braces,
+    unused_qualifications,
+    warnings,
+)]
 
 //! Allow running external commands and properly handle its success
 //! and failures.
