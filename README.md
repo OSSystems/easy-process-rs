@@ -7,11 +7,12 @@ and failures.
 
 This creates provides a `run` function that does inline parsing of
 literal command line strings (handling escape codes and splitting
-at whitespace) and checks the ExitStatus of the command. If it
-didn't succeed they will return a Err(...) instead of a Ok(...).
+at whitespace) and checks the `ExitStatus` of the command. If it
+didn't succeed they will return a `Err(...)` instead of a
+`Ok(...)`.
 
 Note that the provided functions do return their own `Output`
-struct instead of std::process::Output.
+struct instead of [`std::process::Output`].
 
 ## Example
 ```rust
@@ -25,6 +26,8 @@ assert_eq!(&output.stdout, "1 2 3 4\n");
 let output = easy_process::run(r#"sh -c 'echo "1 2 3 4" >&2'"#)?;
 assert_eq!(&output.stderr, "1 2 3 4\n");
 ```
+
+[`std::process::Output`]: https://doc.rust-lang.org/std/process/struct.Output.html
 
 ## License
 
