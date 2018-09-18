@@ -21,8 +21,9 @@
 //!
 //! This creates provides a `run` function that does inline parsing of
 //! literal command line strings (handling escape codes and splitting
-//! at whitespace) and checks the ExitStatus of the command. If it
-//! didn't succeed they will return a Err(...) instead of a Ok(...).
+//! at whitespace) and checks the `ExitStatus` of the command. If it
+//! didn't succeed they will return a `Err(...)` instead of a
+//! `Ok(...)`.
 //!
 //! Note that the provided functions do return their own `Output`
 //! struct instead of [`std::process::Output`].
@@ -56,7 +57,7 @@ use std::io;
 use std::process::ExitStatus;
 
 #[derive(Debug, Default)]
-/// Holds the output for a giving easy_process::run
+/// Holds the output for a giving `easy_process::run`
 pub struct Output {
     /// The stdout output of the process
     pub stdout: String,
@@ -124,7 +125,7 @@ impl fmt::Display for Error {
 ///
 /// # Errors
 ///
-/// if the exit status is not successful or a io::Error was returned.
+/// if the exit status is not successful or a `io::Error` was returned.
 pub fn run(cmd: &str) -> Result<Output, Error> {
     let mut cmd = cmd.to_string();
     let mut cmd = cmd.parse_cmdline_words();
