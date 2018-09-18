@@ -1,6 +1,6 @@
 [package]
 name = "easy_process"
-version = "0.1.4"
+version = "0.1.5-alpha.0"
 authors = ["Otavio Salvador <otavio@ossystems.com.br>"]
 description = "Easy to use process runner"
 repository = "https://github.com/otavio/easy-process-rs"
