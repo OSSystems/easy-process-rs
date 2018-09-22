@@ -1,7 +1,6 @@
 // Copyright (C) 2018 O.S. Systems Sofware LTDA
 //
 // SPDX-License-Identifier: MIT OR Apache-2.0
-//
 
 #![deny(
     missing_copy_implementations,
@@ -43,7 +42,7 @@
 //! # Ok(())
 //! # }
 //! # run();
-//!```
+//! ```
 //!
 //! [`std::process::Output`]: https://doc.rust-lang.org/std/process/struct.Output.html
 
@@ -51,10 +50,7 @@ extern crate checked_command;
 extern crate cmdline_words_parser;
 
 use cmdline_words_parser::StrExt;
-use std::error;
-use std::fmt;
-use std::io;
-use std::process::ExitStatus;
+use std::{error, fmt, io, process::ExitStatus};
 
 #[derive(Debug, Default)]
 /// Holds the output for a giving `easy_process::run`
@@ -97,6 +93,7 @@ impl error::Error for Error {
     fn description(&self) -> &str {
         "Process error"
     }
+
     fn cause(&self) -> Option<&error::Error> {
         Some(self)
     }
