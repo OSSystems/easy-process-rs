@@ -12,7 +12,7 @@
     unstable_features,
     unused_import_braces,
     unused_qualifications,
-    warnings,
+    warnings
 )]
 
 //! Allow running external commands and properly handle its success
