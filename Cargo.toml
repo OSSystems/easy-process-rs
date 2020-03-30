@@ -15,4 +15,4 @@ travis-ci = { repository = "otavio/easy-process-rs" }
 
 [dependencies]
 checked_command = "0.2.2"
-cmdline_words_parser = "0.1.0"
+cmdline_words_parser = "0.2.0"
