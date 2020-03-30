@@ -49,7 +49,7 @@
 extern crate checked_command;
 extern crate cmdline_words_parser;
 
-use cmdline_words_parser::StrExt;
+use cmdline_words_parser::parse_posix;
 use std::{error, fmt, io, process::ExitStatus};
 
 #[derive(Debug, Default)]
@@ -125,7 +125,7 @@ impl fmt::Display for Error {
 /// if the exit status is not successful or a `io::Error` was returned.
 pub fn run(cmd: &str) -> Result<Output, Error> {
     let mut cmd = cmd.to_string();
-    let mut cmd = cmd.parse_cmdline_words();
+    let mut cmd = parse_posix(&mut cmd);
 
     let mut p = checked_command::CheckedCommand::new(cmd.next().unwrap());
     for arg in cmd {
