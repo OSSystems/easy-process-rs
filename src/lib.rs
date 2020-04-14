@@ -151,3 +151,12 @@ fn failing_command() {
         }
     }
 }
+
+#[test]
+fn success_command() {
+    // failing command with exit status 1
+    match run(r#"sh -c 'echo "ok" && exit 0'"#) {
+        Ok(output) => assert_eq!(&output.stdout, "ok\n"),
+        Err(e) => panic!("unexpected error: {:?}", e),
+    }
+}
