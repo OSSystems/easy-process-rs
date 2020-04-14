@@ -46,9 +46,6 @@
 //!
 //! [`std::process::Output`]: https://doc.rust-lang.org/std/process/struct.Output.html
 
-extern crate checked_command;
-extern crate cmdline_words_parser;
-
 use cmdline_words_parser::parse_posix;
 use std::{error, fmt, io, process::ExitStatus};
 
@@ -100,7 +97,7 @@ impl error::Error for Error {
 }
 
 impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Error::Io(e) => write!(f, "unexpected I/O Error: {}", e),
             Error::Failure(ex, output) => write!(

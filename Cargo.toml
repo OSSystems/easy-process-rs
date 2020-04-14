@@ -9,6 +9,7 @@ documentation = "https://docs.rs/easy_process"
 keywords = ["process", "run"]
 license = "MIT OR Apache-2.0"
 readme = "README.md"
+edition = "2018"
 
 [badges]
 travis-ci = { repository = "otavio/easy-process-rs" }
