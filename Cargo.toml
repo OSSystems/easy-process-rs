@@ -17,3 +17,4 @@ travis-ci = { repository = "otavio/easy-process-rs" }
 [dependencies]
 checked_command = "0.2.2"
 cmdline_words_parser = "0.2.0"
+derive_more = { version = "0.99.5", default-features = false, features = ["display", "from", "error"] }

@@ -47,7 +47,8 @@
 //! [`std::process::Output`]: https://doc.rust-lang.org/std/process/struct.Output.html
 
 use cmdline_words_parser::parse_posix;
-use std::{error, fmt, io, process::ExitStatus};
+use derive_more::{Display, Error, From};
+use std::{io, process::ExitStatus};
 
 #[derive(Debug, Default)]
 /// Holds the output for a giving `easy_process::run`
@@ -58,13 +59,20 @@ pub struct Output {
     pub stderr: String,
 }
 
-#[derive(Debug)]
 /// Error variant for `easy_process::run`.
+#[derive(Display, Error, From, Debug)]
 pub enum Error {
     /// I/O error
+    #[display(fmt = "unexpected I/O Error: {}", _0)]
     Io(io::Error),
     /// Process error. It holds two parts: first argument is the exit
     /// code and the second is the output (stdout and stderr).
+    #[display(
+        fmt = "status: {:?} stdout: {:?} stderr: {:?}",
+        "_0.code()",
+        "_1.stdout",
+        "_1.stderr"
+    )]
     Failure(ExitStatus, Output),
 }
 
@@ -81,31 +89,6 @@ impl From<checked_command::Error> for Error {
                     },
                     None => Output::default(),
                 },
-            ),
-        }
-    }
-}
-
-impl error::Error for Error {
-    fn description(&self) -> &str {
-        "Process error"
-    }
-
-    fn cause(&self) -> Option<&dyn error::Error> {
-        Some(self)
-    }
-}
-
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Error::Io(e) => write!(f, "unexpected I/O Error: {}", e),
-            Error::Failure(ex, output) => write!(
-                f,
-                "status: {:?} stdout: {:?} stderr: {:?}",
-                ex.code(),
-                output.stdout,
-                output.stderr
             ),
         }
     }
