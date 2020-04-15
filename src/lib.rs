@@ -48,7 +48,10 @@
 
 use cmdline_words_parser::parse_posix;
 use derive_more::{Display, Error, From};
-use std::{io, process::ExitStatus};
+use std::{
+    io,
+    process::{ChildStdin, ExitStatus, Stdio},
+};
 
 #[derive(Debug, Default)]
 /// Holds the output for a giving `easy_process::run`
@@ -75,6 +78,9 @@ pub enum Error {
     )]
     Failure(ExitStatus, Output),
 }
+
+/// Result alias with crate's Error value
+pub type Result<T> = std::result::Result<T, Error>;
 
 impl From<checked_command::Error> for Error {
     fn from(error: checked_command::Error) -> Self {
@@ -103,20 +109,59 @@ impl From<checked_command::Error> for Error {
 /// # Errors
 ///
 /// if the exit status is not successful or a `io::Error` was returned.
-pub fn run(cmd: &str) -> Result<Output, Error> {
-    let mut cmd = cmd.to_string();
-    let mut cmd = parse_posix(&mut cmd);
+pub fn run(cmd: &str) -> Result<Output> {
+    let mut cmd = setup_process(cmd);
 
-    let mut p = checked_command::CheckedCommand::new(cmd.next().unwrap());
-    for arg in cmd {
-        p.arg(arg);
-    }
-
-    let o = p.output()?;
+    let o = cmd.output()?;
     Ok(Output {
         stdout: String::from_utf8_lossy(&o.stdout).to_string(),
         stderr: String::from_utf8_lossy(&o.stderr).to_string(),
     })
+}
+
+/// Runs command with access to it's stdin.
+///
+/// Spawns the given command then run it's piped stdin through the given
+/// closure. The closure's Result Error type is used as the function's
+/// result so the users can use their locally defined error types and
+/// [easy_process::Error](Error) itself can also be used.
+///
+/// # Examples
+/// ```
+/// let output = easy_process::run_with_stdin("rev", |stdin| {
+///     std::io::Write::write_all(stdin, b"Hello, world!")?;
+///     easy_process::Result::Ok(())
+/// })
+/// .unwrap();
+/// assert_eq!("!dlrow ,olleH", &output.stdout);
+/// ```
+pub fn run_with_stdin<F, E>(cmd: &str, f: F) -> std::result::Result<Output, E>
+where
+    F: FnOnce(&mut ChildStdin) -> std::result::Result<(), E>,
+    E: From<Error>,
+{
+    let mut cmd = setup_process(cmd);
+    // both pipes must be set in order to obtain the output later
+    cmd.stdin(Stdio::piped()).stdout(Stdio::piped());
+    let mut child = cmd.spawn().map_err(Error::from)?;
+    let stdin = child.stdin().as_mut().unwrap();
+
+    f(stdin)?;
+
+    let o = child.wait_with_output().map_err(Error::from)?;
+    Ok(Output {
+        stdout: String::from_utf8_lossy(&o.stdout).to_string(),
+        stderr: String::from_utf8_lossy(&o.stderr).to_string(),
+    })
+}
+
+fn setup_process(cmd: &str) -> checked_command::CheckedCommand {
+    let mut cmd = cmd.to_string();
+    let mut args = parse_posix(&mut cmd);
+
+    let mut p = checked_command::CheckedCommand::new(args.next().unwrap());
+    p.args(args);
+    p
 }
 
 #[test]
@@ -139,4 +184,14 @@ fn success_command() {
         Ok(output) => assert_eq!(&output.stdout, "ok\n"),
         Err(e) => panic!("unexpected error: {:?}", e),
     }
+}
+
+#[test]
+fn piped_input() {
+    let output = run_with_stdin("rev", |stdin| {
+        io::Write::write_all(stdin, b"Hello, world!")?;
+        Result::Ok(())
+    })
+    .unwrap();
+    assert_eq!("!dlrow ,olleH", &output.stdout);
 }
