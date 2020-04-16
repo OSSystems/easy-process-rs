@@ -12,7 +12,7 @@ readme = "README.md"
 edition = "2018"
 
 [badges]
-travis-ci = { repository = "otavio/easy-process-rs" }
+coveralls = { repository = "ossystems/easy-process-rs" }
 
 [dependencies]
 checked_command = "0.2.2"
