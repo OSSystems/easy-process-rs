@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/otavio/easy-process-rs.svg?branch=master)](https://travis-ci.org/otavio/easy-process-rs) [![Documentation](https://docs.rs/easy_process/badge.svg)](https://docs.rs/easy_process)
+![CI](https://github.com/OSSystems/compress-tools-rs/workflows/Rust/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/OSSystems/compress-tools-rs/badge.svg?branch=master)](https://coveralls.io/github/OSSystems/compress-tools-rs?branch=master)
+[![Documentation](https://docs.rs/compress-tools/badge.svg)](https://docs.rs/compress-tools)
 
 # {{crate}}
 

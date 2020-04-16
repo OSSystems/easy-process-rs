@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/otavio/easy-process-rs.svg?branch=master)](https://travis-ci.org/otavio/easy-process-rs) [![Documentation](https://docs.rs/easy_process/badge.svg)](https://docs.rs/easy_process)
+![Continuous integration](https://github.com/OSSystems/easy-process-rs/workflows/Continuous%20integration/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/OSSystems/easy-process-rs/badge.svg?branch=master)](https://coveralls.io/github/OSSystems/easy-process-rs?branch=master)
+[![Documentation](https://docs.rs/easy_process/badge.svg)](https://docs.rs/easy_process)
 
 # easy_process
 
