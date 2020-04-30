@@ -18,6 +18,14 @@
 //! Allow running external commands and properly handle its success
 //! and failures.
 //!
+//! | Platform | Build Status |
+//! | -------- | ------------ |
+//! | Linux | [![build status](https://github.com/OSSystems/easy-process-rs/workflows/CI%20(Linux)/badge.svg)](https://github.com/OSSystems/easy-process-rs/actions) |
+//! | macOS | [![build status](https://github.com/OSSystems/easy-process-rs/workflows/CI%20(macOS)/badge.svg)](https://github.com/OSSystems/easy-process-rs/actions) |
+//! | Windows | [![build status](https://github.com/OSSystems/easy-process-rs/workflows/CI%20(Windows)/badge.svg)](https://github.com/OSSystems/easy-process-rs/actions) |
+//!
+//! ---
+//!
 //! This creates provides a `run` function that does inline parsing of
 //! literal command line strings (handling escape codes and splitting
 //! at whitespace) and checks the `ExitStatus` of the command. If it
@@ -28,7 +36,7 @@
 //! struct instead of [`std::process::Output`].
 //!
 //! # Example
-//! ```
+//! ```no_run
 //! # fn run() -> Result<(), easy_process::Error> {
 //! use easy_process;
 //!
@@ -45,6 +53,17 @@
 //! ```
 //!
 //! [`std::process::Output`]: https://doc.rust-lang.org/std/process/struct.Output.html
+//!
+//! Commands on windows are also supported in the same way:
+//!
+//! ```no_run
+//! # fn run() -> Result<(), easy_process::Error> {
+//! let output = easy_process::run(r#"powershell /C 'echo "1 2 3 4"'"#)?;
+//! assert_eq!(&output.stdout, "1 2 3 4\r\n");
+//! # Ok(())
+//! # }
+//! # run();
+//! ```
 
 use cmdline_words_parser::parse_posix;
 use derive_more::{Display, Error, From};
@@ -127,7 +146,7 @@ pub fn run(cmd: &str) -> Result<Output> {
 /// [easy_process::Error](Error) itself can also be used.
 ///
 /// # Examples
-/// ```
+/// ```no_run
 /// let output = easy_process::run_with_stdin("rev", |stdin| {
 ///     std::io::Write::write_all(stdin, b"Hello, world!")?;
 ///     easy_process::Result::Ok(())
