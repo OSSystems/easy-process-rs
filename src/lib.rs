@@ -164,34 +164,76 @@ fn setup_process(cmd: &str) -> checked_command::CheckedCommand {
     p
 }
 
-#[test]
-fn failing_command() {
-    // failing command with exit status 1
-    match run(r#"sh -c 'echo "error" >&2; exit 1'"#) {
-        Ok(_) => panic!("call should have failed"),
-        Err(Error::Io(io_err)) => panic!("unexpected I/O Error: {:?}", io_err),
-        Err(Error::Failure(ex, output)) => {
-            assert_eq!(ex.code().unwrap(), 1);
-            assert_eq!(&output.stderr, "error\n");
+#[cfg(all(test, not(windows)))]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn failing_command() {
+        // failing command with exit status 1
+        match run(r#"sh -c 'echo "error" >&2; exit 1'"#) {
+            Ok(_) => panic!("call should have failed"),
+            Err(Error::Io(io_err)) => panic!("unexpected I/O Error: {:?}", io_err),
+            Err(Error::Failure(ex, output)) => {
+                assert_eq!(ex.code().unwrap(), 1);
+                assert_eq!(&output.stderr, "error\n");
+            }
         }
     }
-}
 
-#[test]
-fn success_command() {
-    // failing command with exit status 1
-    match run(r#"sh -c 'echo "ok" && exit 0'"#) {
-        Ok(output) => assert_eq!(&output.stdout, "ok\n"),
-        Err(e) => panic!("unexpected error: {:?}", e),
+    #[test]
+    fn success_command() {
+        // failing command with exit status 1
+        match run(r#"sh -c 'echo "ok" && exit 0'"#) {
+            Ok(output) => assert_eq!(&output.stdout, "ok\n"),
+            Err(e) => panic!("unexpected error: {:?}", e),
+        }
+    }
+
+    #[test]
+    fn piped_input() {
+        let output = run_with_stdin("rev", |stdin| {
+            io::Write::write_all(stdin, b"Hello, world!")?;
+            Result::Ok(())
+        })
+        .unwrap();
+        assert_eq!("!dlrow ,olleH", &output.stdout);
     }
 }
 
-#[test]
-fn piped_input() {
-    let output = run_with_stdin("rev", |stdin| {
-        io::Write::write_all(stdin, b"Hello, world!")?;
-        Result::Ok(())
-    })
-    .unwrap();
-    assert_eq!("!dlrow ,olleH", &output.stdout);
+#[cfg(all(test, windows))]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn failing_command() {
+        // failing command with exit status 1
+        match run(r#"powershell /C '[Console]::Error.WriteLine("Error"); exit(1)'"#) {
+            Ok(_) => panic!("call should have failed"),
+            Err(Error::Io(io_err)) => panic!("unexpected I/O Error: {:?}", io_err),
+            Err(Error::Failure(ex, output)) => {
+                assert_eq!(ex.code().unwrap(), 1);
+                assert_eq!(&output.stderr, "Error\r\n");
+            }
+        }
+    }
+
+    #[test]
+    fn success_command() {
+        // failing command with exit status 1
+        match run(r#"powershell /C "echo 1 2 3 4""#) {
+            Ok(output) => assert_eq!(&output.stdout, "1\r\n2\r\n3\r\n4\r\n"),
+            Err(e) => panic!("unexpected error: {:?}", e),
+        }
+    }
+
+    #[test]
+    fn piped_input() {
+        let output = run_with_stdin(r#"powershell /C -"#, |stdin| {
+            io::Write::write_all(stdin, b"echo 4 3 2 1")?;
+            Result::Ok(())
+        })
+        .unwrap();
+        assert_eq!("4\r\n3\r\n2\r\n1\r\n", &output.stdout);
+    }
 }
