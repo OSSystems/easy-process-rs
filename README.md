@@ -24,8 +24,7 @@ Note that the provided functions do return their own `Output`
 struct instead of [`std::process::Output`].
 
 ## Example
-```rust, no_run
-## fn run() -> Result<(), easy_process::Error> {
+```rust
 use easy_process;
 
 // stdout
@@ -35,16 +34,13 @@ assert_eq!(&output.stdout, "1 2 3 4\n");
 // stderr
 let output = easy_process::run(r#"sh -c 'echo "1 2 3 4" >&2'"#)?;
 assert_eq!(&output.stderr, "1 2 3 4\n");
-## Ok(())
-## }
-## run();
-```rust
+```
 
 [`std::process::Output`]: https://doc.rust-lang.org/std/process/struct.Output.html
 
 Commands on windows are also supported in the same way:
 
-```rust, no_run
+```rust
 let output = easy_process::run(r#"powershell /C 'echo "1 2 3 4"'"#)?;
 assert_eq!(&output.stdout, "1 2 3 4\r\n");
 ```
