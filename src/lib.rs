@@ -197,7 +197,9 @@ mod tests {
             Result::Ok(())
         })
         .unwrap();
-        assert_eq!("!dlrow ,olleH", &output.stdout);
+        // Older versions of rev will add an new line terminator
+        // so we test only the start of the stdout
+        assert!(&output.stdout.starts_with("!dlrow ,olleH"));
     }
 }
 
