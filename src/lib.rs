@@ -38,8 +38,6 @@
 //! # Example
 //! ```no_run
 //! # fn run() -> Result<(), easy_process::Error> {
-//! use easy_process;
-//!
 //! // stdout
 //! let output = easy_process::run(r#"sh -c 'echo "1 2 3 4"'"#)?;
 //! assert_eq!(&output.stdout, "1 2 3 4\n");
@@ -49,20 +47,17 @@
 //! assert_eq!(&output.stderr, "1 2 3 4\n");
 //! # Ok(())
 //! # }
-//! # run();
 //! ```
 //!
 //! [`std::process::Output`]: https://doc.rust-lang.org/std/process/struct.Output.html
 //!
 //! Commands on windows are also supported in the same way:
-//!
 //! ```no_run
 //! # fn run() -> Result<(), easy_process::Error> {
 //! let output = easy_process::run(r#"powershell /C 'echo "1 2 3 4"'"#)?;
 //! assert_eq!(&output.stdout, "1 2 3 4\r\n");
 //! # Ok(())
 //! # }
-//! # run();
 //! ```
 
 use cmdline_words_parser::parse_posix;
@@ -143,16 +138,18 @@ pub fn run(cmd: &str) -> Result<Output> {
 /// Spawns the given command then run it's piped stdin through the given
 /// closure. The closure's Result Error type is used as the function's
 /// result so the users can use their locally defined error types and
-/// [easy_process::Error](Error) itself can also be used.
+/// [`enum@Error`] itself can also be used.
 ///
 /// # Examples
 /// ```no_run
+/// # fn run() -> Result<(), easy_process::Error> {
 /// let output = easy_process::run_with_stdin("rev", |stdin| {
 ///     std::io::Write::write_all(stdin, b"Hello, world!")?;
 ///     easy_process::Result::Ok(())
-/// })
-/// .unwrap();
+/// })?;
 /// assert_eq!("!dlrow ,olleH", &output.stdout);
+/// # Ok(())
+/// # }
 /// ```
 pub fn run_with_stdin<F, E>(cmd: &str, f: F) -> std::result::Result<Output, E>
 where
